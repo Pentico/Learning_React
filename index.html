@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+    <link type="text/css" href="css/style.css" rel="stylesheet"/>
+</head>
+<body>
+
+<div id="app">
+
+</div>
+
+<div id="btnCheck">
+
+</div>
+
+<div id="Bboard"></div>
+
+
+<script src="build/react.js"></script>
+<script src="build/react-dom.js"></script>
+<script src="build/browser.min.js"></script>
+<script type="text/babel" >
+
+   var MyComponent = React.createClass({
+       render: function () {
+           return <div className="note">
+               <h1>{this.props.text}</h1>
+               <p> {this.props.children}</p>
+           </div>;
+
+       }
+   });
+
+    ReactDOM.render(
+            <MyComponent/>
+            , document.getElementById('app'));
+
+   // Creating a chekbox below ///////////////
+
+    var CheckBox = React.createClass({
+
+        getInitialState: function () {
+            return {checked: true}
+        },
+        handleCheck: function () {
+            this.setState({checked: !this.state.checked})
+
+        },
+        render: function () {
+
+            var msg;
+
+            if (this.state.checked){
+                msg = 'Checked';
+            }else {
+                msg = 'unChecked';
+            }
+
+            return (<div>
+                <input type="checkbox" onChange={this.handleCheck} defaultChecked={this.state.checked}/>
+                <p>{msg}</p>
+            </div>);
+
+        }
+    });
+
+    ReactDOM.render(<CheckBox/>,document.getElementById("btnCheck"));
+
+    //////////////// END of CheckBoX ///////////////////////////////
+                    /// Making  a Board ///////////
+    var Board = React.createClass({
+        propTypes: {
+            count: function (props, propName) {
+                if (typeof props[propName] !== "number"){
+                    return new Error( 'The count property must equal a number');
+                }
+                if (props[propName] > 100){
+                    return new Error("Creating " + props[propName] + "notes is ridiculous");
+                };
+
+            }
+        },
+
+        getInitialState: function () {
+            return {
+                notes: [
+                        'Call Bill',
+                        'Email Lisa',
+                        'Make dentist appt',
+                        'Send Proposal'
+                ]
+            };
+
+        },
+
+        render:function () {
+            return( <div className="board">
+                {this.state.notes.map(function (note, i) {
+                    return (
+                            <MyComponent key="{i}">{note}</MyComponent>
+                    );
+                })}
+                </div>);
+
+        }
+    });
+
+
+    ReactDOM.render(<Board count={1} />,document.getElementById("Bboard"));
+    </script>
+    </body>
+    </html>
